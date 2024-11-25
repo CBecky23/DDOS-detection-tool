@@ -1,0 +1,5 @@
+{
+    "LOG_PATH": "logs/detection_log.log",
+    "MODEL_PATH": "models/trained_model.pkl",
+    "DATA_PATH": "data/raw/captured_traffic.csv"
+}
