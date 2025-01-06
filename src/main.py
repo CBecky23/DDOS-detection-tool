@@ -1,5 +1,6 @@
 import sys
 import os
+import json
 import argparse
 import logging
 from src.utils.config import Config
@@ -76,14 +77,14 @@ def main():
                 logging.error("Threshold detection requires --packet_rate and --src_ip.")
                 raise ValueError("Missing arguments for threshold detection.")
 
-        # Step 4: Machine Learning - Training
+        # Step 4: Training Model
         if args.train:
-            print("Training machine learning model...")
-            logging.info("Training ML model...")
+            print("Training model...")
+            logging.info("Training model...")
             train_model(processed_data_path)
-            logging.info("ML model trained successfully.")
+            logging.info("Model training completed.")
 
-        # Step 5: Machine Learning - Prediction
+        # Step 5: Predicting Anomalies
         if args.predict:
             print("Predicting anomalies...")
             logging.info("Predicting anomalies...")
@@ -109,7 +110,7 @@ def main():
 
     except Exception as e:
         logging.error(f"An error occurred: {e}")
-        print(f"Error: {e}")
+        print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     main()
