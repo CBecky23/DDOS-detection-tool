@@ -2,3 +2,17 @@
 2024-11-24 02:47:46,016 - ERROR - An error occurred: RAW_DATA_PATH does not exist: ../data/raw/captured_traffic.csv
 2024-11-24 02:52:56,776 - ERROR - An error occurred: RAW_DATA_PATH does not exist: ../data/raw/captured_traffic.csv
 2024-11-24 02:53:10,630 - ERROR - An error occurred: RAW_DATA_PATH does not exist: ../data/raw/captured_traffic.csv
+2025-01-07 21:12:44,587 - INFO - Configuration loaded successfully.
+2025-01-07 21:12:56,159 - INFO - Configuration loaded successfully.
+2025-01-07 21:13:05,730 - INFO - Configuration loaded successfully.
+2025-01-07 21:14:14,244 - INFO - Configuration loaded successfully.
+2025-01-07 21:14:34,770 - INFO - Configuration loaded successfully.
+2025-01-07 21:17:21,154 - INFO - Configuration loaded successfully.
+2025-01-07 22:40:50,185 - INFO - Configuration loaded successfully.
+2025-01-07 22:40:57,666 - INFO - Configuration loaded successfully.
+2025-01-07 22:41:54,870 - INFO - Configuration loaded successfully.
+2025-01-07 22:42:14,009 - INFO - Configuration loaded successfully.
+2025-01-07 22:49:46,440 - INFO - Configuration loaded successfully.
+2025-01-07 22:52:26,246 - INFO - Configuration loaded successfully.
+2025-01-07 22:52:26,247 - ERROR - An error occurred: 'Namespace' object has no attribute 'sniff'
+2025-01-07 22:55:40,626 - INFO - Configuration loaded successfully.

@@ -23,4 +23,3 @@ beautifulsoup4     # For web scraping
 requests           # For sending HTTP requests
 # Additional utilities
 datetime            # Built-in; no installation required
-```

@@ -1,5 +1,11 @@
 {
-    "LOG_PATH": "logs/detection_log.log",
-    "MODEL_PATH": "models/trained_model.pkl",
-    "DATA_PATH": "data/raw/captured_traffic.csv"
+    "LOG_PATH": "../logs/detection.log",
+    "MODEL_PATH": "../models/trained_model.pkl",
+    "DATA_PATH": "data\\processed\\processed_data.csv",
+    "MODEL_INFO_PATH": "../models/model_info",
+    "RAW_DATA_PATH": "../data/raw/captured_traffic.csv",
+    "CONTAMINATION_RATE": 0.01,
+    "THRESHOLD_PACKET_RATE": 100,
+    "ENV": "development",
+    "PROCESSED_DATA_PATH": "../data/processed/processed_data.csv"
 }

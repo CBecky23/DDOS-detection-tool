@@ -1,8 +1,13 @@
-import sys
+# src/main.py
+
 import os
-import json
-import argparse
+import sys
 import logging
+import argparse
+
+# Add the project root directory to the system path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from src.utils.config import Config
 from src.utils.detection_log import log_detection
 from src.capture.packet_sniffer import start_sniffing
@@ -10,24 +15,7 @@ from data.preprocess.preprocess import preprocess_data
 from src.detection.threshold_detection import threshold_detection
 from src.detection.ml_detection import train_model, predict_anomaly
 from src.filtering.ip_filter import check_and_filter_ip
-from visualize_data import visualize_data  
-
-# Add the project root directory to the system path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-# Load configuration
-config = Config()
-log_path = config.LOG_PATH
-model_path = config.MODEL_PATH
-data_path = config.DATA_PATH
-model_info_path = config.MODEL_INFO_PATH
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    filename=log_path,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
+from src.visualize.visualize_data import visualize_data
 
 def setup_arg_parser():
     """Set up command-line argument parser."""
@@ -41,6 +29,11 @@ def setup_arg_parser():
     parser.add_argument('--visualize', action='store_true', help="Generate anomaly visualization.")
     parser.add_argument('--packet_rate', type=int, help="Packet rate for threshold detection.")
     parser.add_argument('--src_ip', type=str, help="Source IP address for filtering.")
+    parser.add_argument('--file_path', type=str, help="Path to the CSV file for visualization.")
+    parser.add_argument('--timestamp_col', type=str, default='timestamp', help="Column name for timestamps.")
+    parser.add_argument('--value_col', type=str, default='value', help="Column name for values to plot.")
+    parser.add_argument('--anomaly_col', type=str, default='anomaly', help="Column name for anomalies.")
+    parser.add_argument('--plot_type', type=str, default='line', help="Type of plot ('line' or 'scatter').")
     return parser
 
 def main():
@@ -48,24 +41,25 @@ def main():
     parser = setup_arg_parser()
     args = parser.parse_args()
 
+    # Load and validate configuration
+    config = Config(config_file="../config/config.json")
+    config.validate()
+
     logging.info("Configuration loaded successfully.")
     print("Configuration loaded successfully.")
 
     try:
         # Step 1: Packet Sniffing
         if args.sniff:
-            print("Starting packet sniffing...")
-            logging.info("Starting packet sniffing...")
+            print("Sniffing packets...")
+            logging.info("Sniffing packets...")
             start_sniffing()
 
-        # Step 2: Preprocessing
+        # Step 2: Data Preprocessing
         if args.preprocess:
             print("Preprocessing data...")
             logging.info("Preprocessing data...")
-            processed_data_path = preprocess_data(data_path)
-            logging.info(f"Data preprocessed and saved to {processed_data_path}.")
-        else:
-            processed_data_path = data_path  # Use raw data if preprocessing is skipped
+            preprocess_data()
 
         # Step 3: Threshold Detection
         if args.detect:
@@ -81,32 +75,42 @@ def main():
         if args.train:
             print("Training model...")
             logging.info("Training model...")
-            train_model(processed_data_path)
+            train_model(config.PROCESSED_DATA_PATH)
             logging.info("Model training completed.")
 
         # Step 5: Predicting Anomalies
         if args.predict:
             print("Predicting anomalies...")
             logging.info("Predicting anomalies...")
-            predict_anomaly(processed_data_path)
+            predict_anomaly()
             logging.info("Anomaly prediction completed.")
 
-        # Step 6: IP Filtering
+        # Step 6: Filtering IPs
         if args.filter:
             if args.src_ip:
-                print(f"Filtering IP: {args.src_ip}...")
-                logging.info("Filtering IP...")
+                print(f"Filtering IPs for src_ip={args.src_ip}...")
+                logging.info("Filtering IPs...")
                 check_and_filter_ip(args.src_ip)
             else:
-                logging.error("IP filtering requires --src_ip.")
-                raise ValueError("Missing argument for IP filtering.")
+                logging.error("Filtering requires --src_ip.")
+                raise ValueError("Missing argument for filtering.")
 
         # Step 7: Visualization
         if args.visualize:
-            print("Visualizing data...")
-            logging.info("Generating visualization...")
-            visualize_data(file_path=processed_data_path)
-            logging.info("Visualization completed.")
+            if args.file_path:
+                print("Generating visualization...")
+                logging.info("Generating visualization...")
+                visualize_data(
+                    file_path=args.file_path,
+                    timestamp_col=args.timestamp_col,
+                    value_col=args.value_col,
+                    anomaly_col=args.anomaly_col,
+                    plot_type=args.plot_type
+                )
+                logging.info("Visualization completed.")
+            else:
+                logging.error("Visualization requires --file_path.")
+                raise ValueError("Missing argument for visualization.")
 
     except Exception as e:
         logging.error(f"An error occurred: {e}")

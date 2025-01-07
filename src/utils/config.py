@@ -64,8 +64,9 @@ class Config:
 
     def validate(self):
         """Validate configuration settings."""
-        if not os.path.isfile(self.config["RAW_DATA_PATH"]):
-            raise ValueError(f"RAW_DATA_PATH does not exist: {self.config['RAW_DATA_PATH']}")
+        if not os.path.isdir(self.config["RAW_DATA_PATH"]):
+            os.makedirs(os.path.dirname(self.config["RAW_DATA_PATH"]), exist_ok=True)
+            print(f"RAW_DATA_PATH directory created: {os.path.dirname(self.config['RAW_DATA_PATH'])}")
         if not (0 <= self.config["CONTAMINATION_RATE"] <= 1):
             raise ValueError("CONTAMINATION_RATE must be between 0 and 1.")
         if self.config["THRESHOLD_PACKET_RATE"] <= 0:
